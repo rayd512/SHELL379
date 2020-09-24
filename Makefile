@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-Wall -O2 -std=c++11
-OBJECTS=main.o validity.o string_funcs.o parser.o
+OBJECTS=main.o validity.o string_funcs.o parser.o shell_commands.o
 DIR1=src/helpers/
 INC=$(DIR1)
 INC_PARAMS=$(foreach d, $(INC), -I$d)
@@ -19,6 +19,9 @@ string_funcs.o: $(DIR1)string_funcs.cpp
 
 parser.o: $(DIR1)parser.cpp
 	$(CC) $(CFLAGS) -c $(DIR1)parser.cpp $(INC_PARAMS) -o parser.o
+
+shell_commands.o: $(DIR1)shell_commands.cpp
+	$(CC) $(CFLAGS) -c $(DIR1)shell_commands.cpp $(INC_PARAMS) -o shell_commands.o
 
 clean:
 	rm shell379 *.o
