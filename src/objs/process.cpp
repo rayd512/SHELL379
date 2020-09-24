@@ -1,17 +1,5 @@
-#include <string>
+#include "process.h"
 
-class Process {
-
-	public:
-		int process_id;
-
-	private:
-		char status;
-		int time;
-		string command;
-
-	Process(id) {
-		this.process_id = id
-	}
-
+Process::Process(int id) {
+	this->process_id = id;
 }

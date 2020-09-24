@@ -1,5 +1,6 @@
 #include <iostream>
 #include "validity.h"
+#include "parser.h"
 
 using namespace std;
 
@@ -7,9 +8,9 @@ int main(void) {
 	string command;
 	while (true) {
 		cout << "SHELL379: ";
-		cin >> command;
+		getline(cin, command);
 		if(is_valid_input(command)) {
-			cout << "Yes" << endl;
+			process_input(command);
 		} else {
 			cout << "No" << endl;
 		}
