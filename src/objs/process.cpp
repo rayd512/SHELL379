@@ -1,5 +1,5 @@
 #include "process.h"
 
-Process::Process(int id) {
-	this->process_id = id;
+Process::Process(pid_t id) {
+	this->pid = id;
 }

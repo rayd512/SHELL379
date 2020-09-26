@@ -1,8 +1,10 @@
 #pragma once
 
-#include <stdlib.h>
+#include <unistd.h>
+#include <iostream>
+#include <sys/time.h>
+#include <sys/resource.h>
 
+void exit_shell379(struct rusage& usage);
 
-
-
-void exit_shell379();
+void display_jobs(struct rusage& usage);

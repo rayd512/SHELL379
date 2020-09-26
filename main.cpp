@@ -12,7 +12,7 @@ int main(void) {
 		if(is_valid_input(command)) {
 			process_input(command);
 		} else {
-			cout << "No" << endl;
+			cout << "Not a valid command" << endl;
 		}
 	}
 

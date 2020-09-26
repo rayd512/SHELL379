@@ -29,4 +29,4 @@ process.o: $(DIR2)process.cpp
 	$(CC) $(CFLAGS) -c $(DIR2)process.cpp $(INC_PARAMS) -o process.o
 
 clean:
-	rm shell379 *.o
+	$(RM) shell379 *.o

@@ -1,17 +1,18 @@
 #pragma once
 
+#include <unistd.h>
 #include <string>
 
 class Process {
 
 	public:
-		int process_id;
+		pid_t pid;
 
 	private:
 		char status;
 		int time;
 		std::string command;
 
-	Process(int id);
+	Process(pid_t id);
 
 };
