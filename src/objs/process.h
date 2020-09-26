@@ -6,6 +6,7 @@
 class Process {
 
 	public:
+		int number;
 		pid_t pid;
 
 	private:
