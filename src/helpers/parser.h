@@ -11,4 +11,6 @@
 #include "shell_commands.h"
 #include "process.h"
 
-void process_input(std::string command);
+void process_input(std::string command, struct rusage &usage,
+					std::vector<Process> &process_table);
+
