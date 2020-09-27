@@ -15,5 +15,8 @@ vector<string> split_input(string command) {
   
 	} while (ss); 
 
+	words.pop_back();
 	return words;
 }
+
+
