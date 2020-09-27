@@ -10,7 +10,8 @@
 #include "string_funcs.h"
 #include "shell_commands.h"
 #include "process.h"
+#include "Process_Table.h"
 
 void process_input(std::string command, struct rusage &usage,
-					std::vector<Process> &process_table);
+					Process_Table &process_table);
 

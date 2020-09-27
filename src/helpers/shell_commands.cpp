@@ -16,7 +16,7 @@ void exit_shell379(struct rusage& usage) {
 }
 
 
-void display_jobs(struct rusage& usage, vector<Process> process_table) {
+void display_jobs(struct rusage& usage, Process_Table process_table) {
 	int running_processes = process_table.size();
 	getrusage(RUSAGE_CHILDREN, &usage);
 
@@ -24,14 +24,14 @@ void display_jobs(struct rusage& usage, vector<Process> process_table) {
 	cout << "Running Processes:" << endl;
 	if (running_processes != 0) {
 		cout << " #     PID S SEC COMMAND" << endl;
-		for (int i = 0; i < int(process_table.size()); i++) {
-			process_table[i].check_status();
-			cout << " " << i << ":   " << process_table[i].pid << " "
-				<< process_table[i].get_status() << " " << process_table[i].get_time()
-				<< "   " << process_table[i].get_command() << endl;
+		for (int i = 0; i < running_processes; i++) {
+			process_table.update();
+			cout << " " << i << ":   " << process_table.processes[i].pid << " "
+				<< process_table.processes[i].get_status() << " " << process_table.processes[i].get_time()
+				<< "   " << process_table.processes[i].get_command() << endl;
 		}
 	}
-	cout << "Processes =     " << running_processes << endl;
+	cout << "Processes =     " << process_table.size() << endl;
 	cout << "Completed Processes: " << endl;
 	cout << "User time =     " << usage.ru_utime.tv_sec << " seconds" << endl;
 	cout << "Sys  time =     " << usage.ru_stime.tv_sec << " seconds" << endl;

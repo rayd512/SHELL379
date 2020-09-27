@@ -8,7 +8,8 @@
 #include <sys/resource.h>
 #include <process.h>
 #include <vector>
+#include <Process_Table.h>
 
 void exit_shell379(struct rusage& usage);
 
-void display_jobs(struct rusage& usage, std::vector<Process> process_table);
+void display_jobs(struct rusage& usage, Process_Table process_table);

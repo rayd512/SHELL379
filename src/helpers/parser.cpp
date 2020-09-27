@@ -6,7 +6,7 @@ const vector<string> keywords = {"exit", "jobs", "kill", "resume", "suspend", "w
 
 void preprocess_input(vector<string> &command, bool &isBackgroundProcess);
 
-void process_input(string command, struct rusage &usage, vector<Process> &process_table) {
+void process_input(string command, struct rusage &usage, Process_Table &process_table) {
 	vector<string> split_command = split_input(command);
 	pid_t cpid;
 	bool isShell379Command = false;
@@ -50,7 +50,7 @@ void process_input(string command, struct rusage &usage, vector<Process> &proces
 				cout << endl;
 			} else {
 				Process child_process = Process(process_table.size(), cpid, command);
-				process_table.push_back(child_process);
+				process_table.add(child_process);
 			}
 		}
 	}
