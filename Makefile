@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-Wall -O2 -std=c++11
-OBJECTS=main.o validity.o string_funcs.o parser.o shell_commands.o process.o
+OBJECTS=main.o validity.o string_funcs.o parser.o shell_commands.o process.o Process_Table.o
 DIR1=src/helpers/
 DIR2=src/objs/
 INC=$(DIR1)
@@ -27,6 +27,9 @@ shell_commands.o: $(DIR1)shell_commands.cpp
 
 process.o: $(DIR2)process.cpp
 	$(CC) $(CFLAGS) -c $(DIR2)process.cpp $(INC_PARAMS) -o process.o
+
+Process_Table.o: $(DIR2)Process_Table.cpp
+	$(CC) $(CFLAGS) -c $(DIR2)Process_Table.cpp $(INC_PARAMS) -o Process_Table.o
 
 clean:
 	$(RM) shell379 *.o

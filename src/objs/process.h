@@ -4,6 +4,7 @@
 #include <string>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <iostream>
 
 class Process {
 
@@ -14,7 +15,8 @@ class Process {
 		int get_time();
 		char get_status();
 		std::string get_command();
-		void check_status();
+		void set_time(int time);
+		void set_status(char status);
 
 	private:
 		char status;
