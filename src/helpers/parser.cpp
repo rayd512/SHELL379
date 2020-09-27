@@ -22,6 +22,16 @@ void process_input(string command, struct rusage &usage, Process_Table &process_
 				case 1:
 					display_jobs(usage, process_table);
 					break;
+				case 2:
+					signal_job(process_table, split_command, SIGKILL);
+					break;
+				case 3:
+					signal_job(process_table, split_command, SIGCONT);
+					break;
+				case 4:
+					signal_job(process_table, split_command, SIGSTOP);
+					break;
+
 			}
 			isShell379Command = true;
 		}
@@ -34,14 +44,14 @@ void process_input(string command, struct rusage &usage, Process_Table &process_
 			_exit(EXIT_FAILURE);
 		}
 		else if (cpid == 0) {
-			vector<char *> argv(split_command.size() + 1);
+			vector<char*> argv(split_command.size() + 1);
 
 			for (int i = 0; i < int(split_command.size()); i++) {
 				argv[i] = &split_command[i][0];
 			}
 
 			execvp(argv[0], argv.data());
-			cout << "Exec Failed" << endl;
+			// cout << "Exec Failed" << endl;
 			_exit(EXIT_FAILURE);
 
 		} else {
