@@ -6,6 +6,9 @@ void exit_shell379(struct rusage& usage) {
 	
 	while(wait(NULL) > 0);
 
+	if(remove("child_output.txt") != 0)
+    	perror("Error deleting temp files");
+
 	getrusage(RUSAGE_CHILDREN, &usage);
 
 	cout << endl;

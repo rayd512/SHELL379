@@ -12,6 +12,8 @@ void process_input(string command, struct rusage &usage, Process_Table &process_
 	bool isShell379Command = false;
 	bool isBackgroundProcess = false;
 	preprocess_input(split_command, isBackgroundProcess);
+	// int fd = open("child_output.txt", O_WRONLY);
+	FILE *fd = fopen("child_output.txt", "w");
 
 	for (int i = 0; i < int(keywords.size()); i++) {
 		if (split_command[0] == keywords[i]) {
@@ -50,6 +52,10 @@ void process_input(string command, struct rusage &usage, Process_Table &process_
 				argv[i] = &split_command[i][0];
 			}
 
+			if (isBackgroundProcess) {
+				dup2(fileno(fd), STDOUT_FILENO);
+				fclose(fd);
+			}
 			execvp(argv[0], argv.data());
 			// cout << "Exec Failed" << endl;
 			_exit(EXIT_FAILURE);
