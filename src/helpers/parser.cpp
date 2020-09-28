@@ -33,6 +33,9 @@ void process_input(string command, struct rusage &usage, Process_Table &process_
 				case 4:
 					signal_job(process_table, split_command, SIGSTOP);
 					break;
+				case 5:
+					wait_job(process_table, split_command);
+					break;
 
 			}
 			isShell379Command = true;

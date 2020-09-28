@@ -11,6 +11,7 @@ class Process {
 	public:
 		int number;
 		pid_t pid;
+		bool isInPS = true;
 		Process(int process_number, pid_t id, std::string command);
 		int get_time();
 		char get_status();

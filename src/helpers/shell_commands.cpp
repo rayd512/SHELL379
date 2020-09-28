@@ -52,10 +52,31 @@ void display_jobs(struct rusage& usage, Process_Table &process_table) {
 void signal_job(Process_Table &process_table, vector<string> split_command, int signal) {
 	process_table.update();
 	vector<Process> ps_vec = process_table.processes;
-
+	bool hasMatch = false;
 	for (int i = 0; i < int(ps_vec.size()); i++) {
 		if(stoi(split_command[1]) == (int)ps_vec[i].pid) {
 			kill(ps_vec[i].pid, signal);
+			hasMatch = true;
 		}
 	}
+
+	if(!hasMatch) {
+		cout << "Could not find PID" + split_command[1] << endl;
+	}
+}
+
+void wait_job(Process_Table &process_table, vector<string> split_command) {
+	process_table.update();
+	int state;
+	vector<Process> ps_vec = process_table.processes;
+
+	for (int i = 0; i < int(ps_vec.size()); i++) {
+		if(stoi(split_command[1]) == (int)ps_vec[i].pid) {
+			// while(!WIFEXITED(state)) {
+			// 	waitpid(ps_vec[i].pid, &state, WNOHANG);
+			// }
+			waitpid(ps_vec[i].pid, &state, WUNTRACED);
+		}
+	}
+
 }
