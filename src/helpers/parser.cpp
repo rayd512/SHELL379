@@ -4,6 +4,7 @@ using namespace std;
 
 const vector<string> keywords = {"exit", "jobs", "kill", "resume", "suspend", "wait"};
 
+void call_wait(int signum);
 void preprocess_input(vector<string> &command, bool &isBackgroundProcess);
 
 void process_input(string command, struct rusage &usage, Process_Table &process_table) {
@@ -11,9 +12,9 @@ void process_input(string command, struct rusage &usage, Process_Table &process_
 	pid_t cpid;
 	bool isShell379Command = false;
 	bool isBackgroundProcess = false;
+
+
 	preprocess_input(split_command, isBackgroundProcess);
-	// int fd = open("child_output.txt", O_WRONLY);
-	FILE *fd = fopen("child_output.txt", "w");
 
 	for (int i = 0; i < int(keywords.size()); i++) {
 		if (split_command[0] == keywords[i]) {
@@ -55,10 +56,6 @@ void process_input(string command, struct rusage &usage, Process_Table &process_
 				argv[i] = &split_command[i][0];
 			}
 
-			if (isBackgroundProcess) {
-				dup2(fileno(fd), STDOUT_FILENO);
-				fclose(fd);
-			}
 			execvp(argv[0], argv.data());
 			// cout << "Exec Failed" << endl;
 			_exit(EXIT_FAILURE);
@@ -68,11 +65,16 @@ void process_input(string command, struct rusage &usage, Process_Table &process_
 				wait(NULL);
 				cout << endl;
 			} else {
+				signal(SIGCHLD, call_wait);
 				Process child_process = Process(process_table.size(), cpid, command);
 				process_table.add(child_process);
 			}
 		}
 	}
+}
+
+void call_wait(int signum) {
+	wait(NULL);
 }
 
 void preprocess_input(vector<string> &command, bool &isBackgroundProcess) {

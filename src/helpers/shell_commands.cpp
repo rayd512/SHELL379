@@ -6,8 +6,6 @@ void exit_shell379(struct rusage& usage) {
 	
 	while(wait(NULL) > 0);
 
-	if(remove("child_output.txt") != 0)
-    	perror("Error deleting temp files");
 
 	getrusage(RUSAGE_CHILDREN, &usage);
 
@@ -24,6 +22,7 @@ void exit_shell379(struct rusage& usage) {
 
 void display_jobs(struct rusage& usage, Process_Table &process_table) {
 	int running_processes;
+
 
 
 	process_table.update();
@@ -61,7 +60,7 @@ void signal_job(Process_Table &process_table, vector<string> split_command, int 
 	}
 
 	if(!hasMatch) {
-		cout << "Could not find PID" + split_command[1] << endl;
+		cout << "Could not find PID: " + split_command[1] << endl;
 	}
 }
 
@@ -69,6 +68,7 @@ void wait_job(Process_Table &process_table, vector<string> split_command) {
 	process_table.update();
 	int state;
 	vector<Process> ps_vec = process_table.processes;
+	bool hasMatch = false;
 
 	for (int i = 0; i < int(ps_vec.size()); i++) {
 		if(stoi(split_command[1]) == (int)ps_vec[i].pid) {
@@ -76,7 +76,11 @@ void wait_job(Process_Table &process_table, vector<string> split_command) {
 			// 	waitpid(ps_vec[i].pid, &state, WNOHANG);
 			// }
 			waitpid(ps_vec[i].pid, &state, WUNTRACED);
+			hasMatch = true;
 		}
 	}
 
+	if(!hasMatch) {
+		cout << "Could not find PID: " + split_command[1] << endl;
+	}
 }
