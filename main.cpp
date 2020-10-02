@@ -8,7 +8,6 @@ using namespace std;
 int main(void) {
 	string command;
 	struct rusage usage;
-	// vector<Process> process_table;
 	Process_Table process_table;
 	while (true) {
 		cout << "SHELL379: ";

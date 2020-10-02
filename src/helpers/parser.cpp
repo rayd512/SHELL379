@@ -2,19 +2,24 @@
 
 using namespace std;
 
-const vector<string> keywords = {"exit", "jobs", "kill", "resume", "suspend", "wait"};
+const vector<string> keywords = {"exit", "jobs", "kill", "resume", "suspend",
+								"wait", "sleep"};
 
 void call_wait(int signum);
-void preprocess_input(vector<string> &command, bool &isBackgroundProcess);
+void preprocess_input(vector<string> &command, bool &isBackgroundProcess,
+					  vector<pair<string, string> > &files);
 
 void process_input(string command, struct rusage &usage, Process_Table &process_table) {
 	vector<string> split_command = split_input(command);
+	vector<pair<string, string> > files;
 	pid_t cpid;
+	int status;
 	bool isShell379Command = false;
 	bool isBackgroundProcess = false;
+	bool isSleep = false;
 
 
-	preprocess_input(split_command, isBackgroundProcess);
+	preprocess_input(split_command, isBackgroundProcess, files);
 
 	for (int i = 0; i < int(keywords.size()); i++) {
 		if (split_command[0] == keywords[i]) {
@@ -37,9 +42,13 @@ void process_input(string command, struct rusage &usage, Process_Table &process_
 				case 5:
 					wait_job(process_table, split_command);
 					break;
-
+				case 6:
+					isSleep = true;
+					break;
 			}
-			isShell379Command = true;
+			if(!isSleep) {
+				isShell379Command = true;
+			}
 		}
 	}
 
@@ -50,24 +59,47 @@ void process_input(string command, struct rusage &usage, Process_Table &process_
 			_exit(EXIT_FAILURE);
 		}
 		else if (cpid == 0) {
-			vector<char*> argv(split_command.size() + 1);
+			if(!isSleep) {
+				vector<char*> argv(split_command.size() + 1);
 
-			for (int i = 0; i < int(split_command.size()); i++) {
-				argv[i] = &split_command[i][0];
+				if (files.size() != 0 && files.size() <= 2) {
+					for(int i = 0; i < int(files.size()); i++) {
+						if(files[i].first == "<") {
+							int in = open(&files[i].second[0], O_RDONLY);
+							dup2(in, STDIN_FILENO);
+							close(in);
+						} else {
+							int out = open(&files[i].second[0], O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
+							dup2(out, STDOUT_FILENO);
+							close(out);
+						}
+					}
+				}
+
+				for (int i = 0; i < int(split_command.size()); i++) {
+					argv[i] = &split_command[i][0];
+				}
+
+				execvp(argv[0], argv.data());
+				// cout << "Exec Failed" << endl;
+				_exit(EXIT_FAILURE);
+			} else {
+				sleep(stoi(split_command[1]));
+				_exit(EXIT_SUCCESS);
 			}
-
-			execvp(argv[0], argv.data());
-			// cout << "Exec Failed" << endl;
-			_exit(EXIT_FAILURE);
 
 		} else {
 			if (!isBackgroundProcess) {
-				wait(NULL);
+
+				signal(SIGCHLD, SIG_DFL);
+				waitpid(cpid, &status, WUNTRACED);
+
 				cout << endl;
 			} else {
 				signal(SIGCHLD, call_wait);
 				Process child_process = Process(process_table.size(), cpid, command);
 				process_table.add(child_process);
+
 			}
 		}
 	}
@@ -77,9 +109,29 @@ void call_wait(int signum) {
 	wait(NULL);
 }
 
-void preprocess_input(vector<string> &command, bool &isBackgroundProcess) {
+void preprocess_input(vector<string> &command, bool &isBackgroundProcess,
+					  vector<pair<string, string> > &files) {
+
 	if(command.back() == "&") {
 		command.pop_back();
 		isBackgroundProcess = true;
+	}
+
+	for(int i = 0; i < int(command.size()); i++ ) {
+		if(command[i].find("<") != string::npos) {
+			pair<string,string> input;
+			input.first = "<";
+			input.second = command[i].substr(1,command[i].size() - 1);
+			files.push_back(input);
+			command.erase(command.begin() + i);
+		}
+
+		if(command[i].find(">") != string::npos) {
+			pair<string,string> output;
+			output.first = ">";
+			output.second = command[i].substr(1,command[i].size() - 1);
+			files.push_back(output);
+			command.erase(command.begin() + i);
+		}
 	}
 }

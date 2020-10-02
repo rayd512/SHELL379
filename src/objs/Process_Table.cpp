@@ -6,7 +6,7 @@ void Process_Table::update() {
 	FILE *all_ps;
 	char ps[80];
 
-	all_ps = popen("ps -eo pid,time,state", "r");
+	all_ps = popen("ps -o pid,time,state", "r");
 
 	if (all_ps == NULL) {
 		perror("Failed to Popen");
