@@ -10,6 +10,7 @@
 #include <sys/wait.h>
 #include <process.h>
 #include <vector>
+#include <iomanip>
 #include <Process_Table.h>
 
 void exit_shell379(struct rusage& usage);
