@@ -130,7 +130,7 @@ void process_input(string command, struct rusage &usage,
 			} else {
 				// Add process to process table if run in background
 				// Signal to recieve signals from children and avoid zombies
-				signal(SIGCHLD, call_wait);
+				signal(SIGCHLD, SIG_IGN);
 				Process child_process = Process(cpid, command);
 				process_table.add(child_process);
 
@@ -139,14 +139,6 @@ void process_input(string command, struct rusage &usage,
 	}
 }
 
-/** Calls wait(null)
- *
- * @param signum the signal number
- *
- */
-void call_wait(int signum) {
-	wait(NULL);
-}
 
 /** Preprocesses the input 
  *
