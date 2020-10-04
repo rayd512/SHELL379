@@ -87,13 +87,20 @@ void process_input(string command, struct rusage &usage,
 						// Take input from a file
 						if(files[i].first == "<") {
 							int in = open(&files[i].second[0], O_RDONLY);
+							if(in == -1) {
+								perror("Error ");
+								_exit(EXIT_FAILURE);
+							}
 							dup2(in, STDIN_FILENO);
 							close(in);
 						} else { 
 							// export STDOUT to a file
 							int out = open(&files[i].second[0],
 										O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
-
+							if(out == -1) {
+								perror("Error ");
+								_exit(EXIT_FAILURE);
+							}
 							dup2(out, STDOUT_FILENO);
 							close(out);
 						}
