@@ -46,7 +46,7 @@ void display_jobs(struct rusage& usage, Process_Table &process_table) {
 	if (running_processes != 0) {
 		cout << " #     PID S SEC COMMAND" << endl;
 		for (int i = 0; i < running_processes; i++) {
-			cout << " " << i << ":   " << process_table.processes[i].pid << " "
+			cout << " " << i << ":" << setw(7) << process_table.processes[i].pid << " "
 				<< process_table.processes[i].get_status() << " " 
 				<< process_table.processes[i].get_time() << "   " 
 				<< process_table.processes[i].get_command() << endl;
