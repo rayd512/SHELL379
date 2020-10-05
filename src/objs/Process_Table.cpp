@@ -93,3 +93,20 @@ int Process_Table::convert_time(string time) {
 	string seconds = time.substr(6,2);
 	return stoi(hour) * 36000 + stoi(minute) * 60 + stoi(seconds);
 }
+
+/** Return num of running process
+ *
+ * Loops through every process and counts all the ones with status R
+ *
+ *
+ * @return an int of the number of running processes
+ */
+int Process_Table::num_of_running() {
+	int count = 0;
+	for(int i = 0; i < int(processes.size()); i++) {
+		if(processes[i].get_status() == 'R') {
+			count++;
+		}
+	}
+	return count;
+}
