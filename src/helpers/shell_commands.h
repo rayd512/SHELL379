@@ -13,7 +13,7 @@
 #include <iomanip>
 #include <Process_Table.h>
 
-void exit_shell379(struct rusage& usage);
+void exit_shell379(struct rusage& usage, Process_Table &process_table);
 
 void display_jobs(struct rusage& usage, Process_Table &process_table);
 

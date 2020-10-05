@@ -43,7 +43,7 @@ void process_input(string command, struct rusage &usage,
 		if (split_command[0] == keywords[i]) {
 			switch(i) {
 				case 0:
-					exit_shell379(usage);
+					exit_shell379(usage, process_table);
 					break;
 				case 1:
 					display_jobs(usage, process_table);

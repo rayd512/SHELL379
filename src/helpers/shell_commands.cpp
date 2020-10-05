@@ -9,8 +9,16 @@ using namespace std;
  *
  * @param usage a struct used to calculate rusage
  */
-void exit_shell379(struct rusage& usage) {
-	
+void exit_shell379(struct rusage& usage, Process_Table &process_table) {
+	process_table.update();
+	vector<Process> ps_vec = process_table.processes;
+
+	// Kill all processes
+	for(int i = 0; i < int(process_table.size()); i++) {
+		if(kill(ps_vec[i].pid, SIGKILL) != 0) {
+			cout << "Operation Unsuccessful" << endl;
+		}
+	}
 
 	// Wait for processes to terminate
 	while(wait(NULL) > 0);
@@ -86,7 +94,7 @@ void signal_job(Process_Table &process_table, vector<string> split_command,
 	for (int i = 0; i < int(ps_vec.size()); i++) {
 		if(stoi(split_command[1]) == (int)ps_vec[i].pid) {
 			if(kill(ps_vec[i].pid, signal) != 0) {
-				cout << "Operation Unsuccesfull" << endl;
+				cout << "Operation Unsuccessful" << endl;
 			}
 			hasMatch = true;
 		}
