@@ -23,6 +23,7 @@ class Process_Table {
 		void update();
 		int size();
 		void add(Process child);
+		int num_of_running();
 
 	private:
 		int convert_time(std::string time);

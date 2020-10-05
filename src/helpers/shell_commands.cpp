@@ -11,6 +11,7 @@ using namespace std;
  */
 void exit_shell379(struct rusage& usage) {
 	
+
 	// Wait for processes to terminate
 	while(wait(NULL) > 0);
 
@@ -53,7 +54,9 @@ void display_jobs(struct rusage& usage, Process_Table &process_table) {
 				<< process_table.processes[i].get_command() << endl;
 		}
 	}
-	cout << "Processes =     " << process_table.size() << endl;
+	cout << "Processes =     " << process_table.num_of_running()
+		 <<" active" << endl;
+
 	cout << "Completed Processes: " << endl;
 	cout << "User time =     " << usage.ru_utime.tv_sec << " seconds" << endl;
 	cout << "Sys  time =     " << usage.ru_stime.tv_sec << " seconds" << endl;
